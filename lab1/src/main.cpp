@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <iostream>
+
 #define pi 3.1415926536
 
 using namespace sf; 
@@ -45,8 +47,12 @@ void square(int n, int x0, int y0, int a, double f, double delta, RenderWindow& 
 
 
 int main() {
-    RenderWindow window(VideoMode(1000, 1000), "Lab №1");
-    int n = 13, x0 = 500, y0 = 800, a = 200;
+    int depth;
+    std::cout << "Depth: ";
+    std::cin >> depth;
+
+    RenderWindow window(VideoMode(1920, 1080), "Lab №1");
+    int x0 = 860, y0 = 850, a = 200;
     double f = 0, delta = pi / 4;
 
     while (window.isOpen()) {
@@ -58,7 +64,7 @@ int main() {
 
         window.clear(Color(10, 10, 10, 0));
 
-        square(n, x0, y0, a, f, delta, window);
+        square(depth, x0, y0, a, f, delta, window);
 
         window.display();
     }
