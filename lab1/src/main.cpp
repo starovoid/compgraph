@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <math.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #define pi 3.1415926536
 
@@ -39,7 +41,7 @@ void square(int n, int x0, int y0, int a, double f, double delta, RenderWindow& 
     draw_line(x1, y1, x2, y2, window);
     draw_line(x2, y2, x3, y3, window);
     draw_line(x3, y3, x0, y0, window);
-
+    
     n--;
     square(n, x3, y3, alp, f + delta, delta, window);
     square(n, x4, y4, bet, f + delta - pi / 2, delta, window);
@@ -47,26 +49,31 @@ void square(int n, int x0, int y0, int a, double f, double delta, RenderWindow& 
 
 
 int main() {
-    int depth;
+    using namespace std::chrono_literals;
+
+    int max_depth;
     std::cout << "Depth: ";
-    std::cin >> depth;
+    std::cin >> max_depth;
 
     RenderWindow window(VideoMode(1920, 1080), "Lab №1");
     int x0 = 860, y0 = 850, a = 200;
     double f = 0, delta = pi / 4;
 
     while (window.isOpen()) {
-        Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == Event::Closed)
-                window.close();
+        for (int depth = 1; depth <= max_depth; depth++) {
+            Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == Event::Closed) {
+                    window.close();
+                    return 0;
+                }
+            }
+
+            window.clear(Color(10, 10, 10, 0));
+            square(depth, x0, y0, a, f, delta, window);
+            window.display();
+            std::this_thread::sleep_for(1000ms);
         }
-
-        window.clear(Color(10, 10, 10, 0));
-
-        square(depth, x0, y0, a, f, delta, window);
-
-        window.display();
     }
 
     return 0;
